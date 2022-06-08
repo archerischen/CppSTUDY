@@ -1,0 +1,29 @@
+#include<iostream>
+#include<string>
+#include<stack>
+using namespace std;
+int main(){
+    stack<int> mys;
+    string str1,str2;
+    cin>>str1>>str2;
+    if(str1.length()>str2.length()){
+        string str(str1.length()-str2.length(),'0');
+        str2 = str+str2;
+    }
+    else{
+        string str(str2.length()-str1.length(),'0');
+        str1 = str+str1;
+    }
+    stack<int> num;
+    int jinwei=0;
+    for(int i=str1.length()-1 ; i>=0 ; i--){
+        num.push((str1[i]-'0'+str2[i]-'0'+jinwei)%10);
+        jinwei = (str1[i]-'0'+str2[i]-'0'+jinwei)/10;
+    }
+    if(jinwei!=0)
+        num.push(jinwei);
+    while(!num.empty()){
+        cout<<num.top();
+        num.pop();
+    }
+}
