@@ -1,0 +1,20 @@
+#include "jianzhi45.h"
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+bool mysuanfa(const string &,const string &);
+void jianzhi45() {
+    vector<int> nums={3,30,34,5,9};
+    vector<string> strnum;
+    for(auto num:nums)
+        strnum.push_back(to_string(num));
+    sort(strnum.begin(),strnum.end(),mysuanfa);
+    string str;
+    for(auto numstr:strnum)
+        str+=numstr;
+    cout<<str;
+}
+bool mysuanfa(const string &a,const string &b){
+    return a+b>b+a;
+}
