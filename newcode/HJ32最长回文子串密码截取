@@ -1,0 +1,24 @@
+#include<iostream>
+#include<string>
+using namespace std;
+string str;
+int getlength(int,int);
+int main(){
+    while(cin>>str){
+        int max=0;//回文长度
+        //概念为传递两个位置过去 往两边递归
+        for(int i=0;i<str.length()-1;i++){
+            int a= 1 + getlength(i-1, i+1);
+            int b=getlength(i, i+1);
+            if(a>max||b>max)
+                max=a>b?a:b;
+        }
+        cout<<max;
+    }
+}
+int getlength(int left,int right){
+    if(left>=0 && right<str.length()&& str[left]==str[right])
+        return 2 + getlength(left-1,right+1);
+    else
+        return 0;
+}
