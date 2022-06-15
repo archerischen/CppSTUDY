@@ -2,64 +2,63 @@
 #include<iostream>
 #include<vector>
 using namespace std;
-vector<long int> row_vec,col_vec;
-int **myp;//二维状态数组
+vector<long int> jishu,oushu;
+int **p1;//二维数组指针
 int row,col;
-long int *partener;//列的配对结果
-bool *state;//是否遍历
-bool issushu(long int num);//判断素数
-bool myfind(int m);//匈牙利算法递归区
-int main()
-{
-    int num;
-    cin>>num;
+bool issushu(long int);//判断素数
+int *part;//记录偶数的伴侣位置 列的配对结果
+bool *visit;//记录偶数是否访问 是否遍历
+bool xunyali(int row);//匈牙利算法递归区
+int main() {
+    int num;//输入的数字个数
+    cin >> num;
     long int now;
-    for(int i=0;i<num;i++){
-        cin>>now;
-        if(now%2==0)
-            row_vec.push_back(now);
+    for (int i = 0; i < num; i++) {
+        cin >> now;
+        if (now % 2 == 1)
+            jishu.push_back(now);
         else
-            col_vec.push_back(now);
-    }
-    row = row_vec.size();
-    col = col_vec.size();
-    myp=new int*[row+1];
-    for(int i=0;i<=row;i++)
-        myp[i] = new int[row+1];
-    partener=new long int[col+1];
-    memset(partener,0,(col+1)*sizeof(long int));
-    state=new bool[col+1];
-    for(int i=1;i<=row;i++){
-        for(int j=1;j<=col;j++){
-            myp[i][j] = issushu(row_vec[i-1]+col_vec[j-1]);
+            oushu.push_back(now);
+    }//奇偶分别放进两个列表
+    row = jishu.size() + 1;//奇数作行
+    col = oushu.size() + 1;//偶数作列
+    part = new int[col];
+    visit = new bool[col];
+    memset(part,0,col*sizeof(int));
+    p1 = new int *[row];//行
+    for (int i = 0; i < row; i++)
+        p1[i] = new int[col];
+    for(int i=1;i<row;i++){
+        for (int j = 1; j < col; ++j) {
+            p1[i][j] = issushu(jishu[i-1]+oushu[j-1]);
         }
     }
     //以上代码仅仅作数据处理，矩阵构造等。
-    
     int count=0;
-    for(int i=1;i<=row;i++){//匈牙利算法主程序区
-        memset(state,0,col+1);
-        if(myfind(i))
+    for(int i=1;i<row;i++){//匈牙利算法递归区
+        memset(visit,0,col*sizeof(bool));
+        if(xunyali(i))
             count++;
     }
     cout<<count;
 }
-bool myfind(int m){//匈牙利算法递归区
-    for(int i=1;i<=col;i++){
-        if(myp[m][i] && !state[i]){
-            state[i]= true;
-            if(!partener[i] || myfind(partener[i])){
-                partener[i] = m;
+bool xunyali(int row){//匈牙利算法
+    for(int i=1;i<col;i++)
+    {
+        if(p1[row][i] && !visit[i]){
+            visit[i] = true;
+            if(!part[i] || xunyali(part[i])){
+                part[i] = row;
                 return true;
             }
         }
     }
     return false;
 }
-bool issushu(long int num)//素数判断
-{
-    for(int i=2;i*i<=num;i++)
-        if(num%i==0)
-            return 0;//不是素数
-    return 1;
+bool issushu(long int a){//素数判断
+    for(int i=2;i*i<=a;i++) {
+        if (a % i == 0)
+            return false;
+    }
+    return true;
 }
